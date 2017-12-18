@@ -11,10 +11,10 @@ SRCDIR = src
 BINDIR = bin
 BDIR = build
 
-_DEPS = app.h
+_DEPS = app.h display.h config.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = app.o
+_OBJ = main.o app.o display.o config.o
 OBJ = $(patsubst %,$(BDIR)/%,$(_OBJ))
 
 default: all

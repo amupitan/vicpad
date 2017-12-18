@@ -1,7 +1,20 @@
 #include <iostream>
 
-int main(int argc, char** argv) {
+#include "../include/vicpad/app.h"
+#include "../include/vicpad/display.h"
+
+namespace vicpad {
+
+  App::App() {
+    cli = new CLIDisplay();
+  }
   
-  std::cout << "hello\n";
-  return 0;
-}
+  void App::start(config c) const {
+    
+  }
+  
+  App::~App() {
+    delete cli;
+  }
+
+} //vicpad
