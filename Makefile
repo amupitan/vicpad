@@ -25,6 +25,7 @@ $(BDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 
 	
 all: $(OBJ)
+	@mkdir -p $(BINDIR)
 	$(CXX) $(LFLAGS) $(DEBUG) -std=c++11 $(wildcard build/*) -o $(BINDIR)/vicpad $(LDFLAGS)
 	
 .PHONY: clean
