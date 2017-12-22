@@ -19,6 +19,7 @@ namespace vicpad{
     
     struct {
       bool user_quit;
+      bool handled;
       uint64_t length;
       int64_t current_input;
       uint16_t line_length;
@@ -27,7 +28,7 @@ namespace vicpad{
     void message(const char* msg) const;
     void update_line_number() const;
     bool should_be_open() const;
-    void process_input(int16_t input);
+    void process_input(display::key_code input);
     void set_cursor_position();
     void update_state();
   public:

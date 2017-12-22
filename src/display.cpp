@@ -1,4 +1,5 @@
 #include <cstring>
+#include <unordered_map>
 
 #include <ncurses.h>
 
@@ -7,6 +8,21 @@
 namespace vicpad{
   
   using pair = display::pair;
+  using key = display::key;
+  using key_code = display::key_code;
+
+  std::unordered_map<int16_t, key> keycodes = {
+    { 0, key::ALPHANUM}, //TODO: empty
+    { KEY_BACKSPACE, key::BACKSPACE},
+    {127, key::BACKSPACE},
+    { KEY_UP, key::UP},
+    {KEY_DOWN, key::DOWN},
+    {KEY_LEFT, key::LEFT},
+    {KEY_RIGHT, key::RIGHT},
+    {10, key::ENTER}, //KEY_ENTER
+    {27, key::ESC},
+
+  };
   
   CLIDisplay::CLIDisplay(uint16_t width, uint16_t height) : width(width), height(height) {
     // start curses mode
@@ -20,6 +36,7 @@ namespace vicpad{
   CLIDisplay::CLIDisplay() {
     initscr();
     noecho();
+    keypad(stdscr, true);
     getmaxyx(stdscr, height, width);
   }
   
@@ -64,18 +81,40 @@ namespace vicpad{
     // getch();
   }
   
-  int16_t CLIDisplay::get_input() const {
-    return getch();
+  key_code CLIDisplay::get_input() const {
+    auto input = getch();
+    if (input >= 32 && input <= 126) { // is readbale char
+      return {key::ALPHANUM, input};
+    }
+
+    auto input_key = keycodes.find(input);
+    if (input_key == keycodes.end()) {
+      return {key::UNKNOWN, -1};
+    }
+
+    return {input_key->second, input};
   }
   
-  void CLIDisplay::set_cursor_position(int&& x, int&& y) const {
+  pair CLIDisplay::get_cursor_position() const {
+    int64_t x, y;
     getyx(stdscr, y, x);
+    return {x, y};
   }
   
   pair CLIDisplay::render(int64_t x, int64_t y, int64_t c) const {
     mvaddch(y, x, c);
     getyx(stdscr, y, x);
     return {x, y};
+  }
+
+  int16_t CLIDisplay::process_input(int16_t input) const {
+    return 0;
+  }
+
+  void CLIDisplay::backspace(uint64_t x, uint64_t y) const {
+    mvaddch(y, x, '\b');
+    delch();
+    refresh();
   }
   
   CLIDisplay::~CLIDisplay(){
