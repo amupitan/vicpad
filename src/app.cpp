@@ -48,6 +48,17 @@ namespace vicpad {
     msg = msg + " L" + std::to_string(interaction.line_length) + ":" + std::to_string(cursor.x + 1) + "C"; 
     cli->left_message(msg.c_str());
   }
+
+  void App::handle_backspace() {
+    interaction.handled = true;
+    if (cursor.x == 0) {
+      cursor.y--;
+      cli->set_cursor_position(cursor.x, cursor.y);
+      return;
+    }
+    cli->backspace(cursor.x, cursor.y);
+    set_cursor_position();
+  }
   
   void App::process_input(key_code input) {
     auto code = input.code;
@@ -63,9 +74,7 @@ namespace vicpad {
         // cursor.x = 0;
         break;
       case key::BACKSPACE:
-        cli->backspace(cursor.x, cursor.y);
-        set_cursor_position();
-        interaction.handled = true;
+        handle_backspace();
         break;
       case key::UP:
         break;

@@ -31,6 +31,7 @@ namespace vicpad{
       virtual void left_message(const char* msg) const = 0;
       virtual key_code get_input() const = 0;
       virtual pair get_cursor_position() const = 0;
+      virtual void set_cursor_position(uint16_t x, uint16_t y) const = 0;
       virtual pair render(int64_t x, int64_t y, int64_t c) const = 0;
       virtual int16_t process_input(int16_t input) const = 0;
       virtual void backspace(uint64_t x, uint64_t y) const = 0;
@@ -90,6 +91,8 @@ namespace vicpad{
     int16_t process_input(int16_t input) const;
 
     void backspace(uint64_t x, uint64_t y) const;    
+
+    void set_cursor_position(uint16_t x, uint16_t y) const;    
     
     /**
      * Closes ncurses window

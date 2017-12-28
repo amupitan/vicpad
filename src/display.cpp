@@ -60,6 +60,10 @@ namespace vicpad{
     refresh();
     // getch();
   }
+
+  void CLIDisplay::set_cursor_position(uint16_t x, uint16_t y) const {
+    move(y, x);
+  }
   
   void CLIDisplay::print(position screen_position, position align, const char* msg) const {
     int y = screen_position == position::TOP ? 0 : height - 1;

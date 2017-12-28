@@ -31,6 +31,7 @@ namespace vicpad{
     void process_input(display::key_code input);
     void set_cursor_position();
     void update_state();
+    void handle_backspace();
   public:
     App();
     void start(config c);
