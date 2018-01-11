@@ -4,13 +4,14 @@
 // #include <cstdint>
 #include "display.h"
 #include "config.h"
+#include "content_manager.h"
 
 namespace vicpad{
-  
   
   class App {
     const char* filename;
     display::Display* cli;
+    ContentManager cm;
     struct {
       uint16_t x;
       uint16_t y;

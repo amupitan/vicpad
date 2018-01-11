@@ -2,6 +2,7 @@
 
 #include "../include/vicpad/app.h"
 #include "../include/vicpad/display.h"
+#include "../include/vicpad/content_manager.h"
 
 namespace vicpad {
   using key = display::key;
@@ -77,12 +78,20 @@ namespace vicpad {
         handle_backspace();
         break;
       case key::UP:
+        cli->set_cursor_position(cursor.x, --cursor.y);
+        interaction.handled = true;        
         break;
       case key::DOWN:
+        cli->set_cursor_position(cursor.x, ++cursor.y); 
+        interaction.handled = true;               
         break;
       case key::LEFT:
+        cli->set_cursor_position(--cursor.x, cursor.y);    
+        interaction.handled = true;    
         break;
       case key::RIGHT:
+        cli->set_cursor_position(++cursor.x, cursor.y);
+        interaction.handled = true;        
         break;
       case key::UNKNOWN:
         break;
