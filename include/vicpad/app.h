@@ -1,7 +1,6 @@
 #ifndef APP_H_
 #define APP_H_
 
-// #include <cstdint>
 #include "display.h"
 #include "config.h"
 #include "content_manager.h"

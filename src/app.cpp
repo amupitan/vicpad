@@ -21,7 +21,7 @@ namespace vicpad {
   
   void App::start(config c) {
     message("hello world");
-    filename = "file.cpp";
+    filename = c.filename;
     while (should_be_open()){
       update_state();
       update_line_number();
