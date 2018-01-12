@@ -20,6 +20,7 @@ namespace vicpad{
     struct {
       bool user_quit;
       bool handled;
+      bool is_enter;
       uint64_t length;
       int64_t current_input;
       uint16_t line_length;
@@ -32,6 +33,7 @@ namespace vicpad{
     void set_cursor_position();
     void update_state();
     void handle_backspace();
+    void handle_enter();
   public:
     App();
     void start(config c);

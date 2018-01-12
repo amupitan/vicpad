@@ -16,6 +16,7 @@ namespace vicpad {
     interaction.line_length = 1;
     interaction.user_quit = false;
     interaction.handled = false;
+    interaction.is_enter = false;
     interaction.current_input = -1;
   }
   
@@ -61,6 +62,20 @@ namespace vicpad {
     set_cursor_position();
   }
   
+  void App::handle_enter() {
+    //interaction.handled = true;
+    interaction.line_length++;
+    interaction.is_enter = true;
+    cm.add_line("", cursor.y);
+    /*if (cursor.x == 0) {
+      cursor.y--;
+      cli->set_cursor_position(cursor.x, cursor.y);
+      return;
+    }
+    cli->backspace(cursor.x, cursor.y);
+    set_cursor_position();*/
+  }
+  
   void App::process_input(key_code input) {
     auto code = input.code;
 
@@ -71,8 +86,7 @@ namespace vicpad {
         interaction.user_quit = true;
         break;
       case key::ENTER: // Enter
-        interaction.line_length++;
-        // cursor.x = 0;
+        handle_enter();
         break;
       case key::BACKSPACE:
         handle_backspace();
