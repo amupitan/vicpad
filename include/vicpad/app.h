@@ -34,6 +34,7 @@ namespace vicpad{
     void update_state();
     void handle_backspace();
     void handle_enter();
+    void handle_char();
   public:
     App();
     void start(config c);

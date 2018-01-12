@@ -62,25 +62,26 @@ namespace vicpad {
     set_cursor_position();
   }
   
+  
   void App::handle_enter() {
     //interaction.handled = true;
     interaction.line_length++;
-    interaction.is_enter = true;
+    // interaction.is_enter = true;
     cm.add_line("", cursor.y);
-    /*if (cursor.x == 0) {
-      cursor.y--;
-      cli->set_cursor_position(cursor.x, cursor.y);
-      return;
-    }
-    cli->backspace(cursor.x, cursor.y);
-    set_cursor_position();*/
+  }
+  
+  void App::handle_char() {
+    cm.add_char((char32_t)interaction.current_input, cursor.y, cursor.x);
   }
   
   void App::process_input(key_code input) {
     auto code = input.code;
-
+    interaction.length = 1; //
+    interaction.current_input = input.value;
+    
     switch (code) {
       case key::ALPHANUM:
+        handle_char();
         break;
       case key::ESC: // ESC
         interaction.user_quit = true;
@@ -111,8 +112,8 @@ namespace vicpad {
         break;
     }
     
-    interaction.length = 1; //
-    interaction.current_input = input.value;
+    // interaction.length = 1; //
+    // interaction.current_input = input.value;
   }
   
   void App::set_cursor_position() {
@@ -137,6 +138,7 @@ namespace vicpad {
   }
   
   App::~App() {
+    cm.dump("dump.txt");
     delete cli;
   }
 

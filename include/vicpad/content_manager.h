@@ -12,6 +12,7 @@ namespace vicpad {
         ContentManager();
         void do_something() const;
         void populate(std::string filename);
+        void dump(std::string filename) const;
         void add_line(std::string line, uint32_t line_number);
         void add_char(char32_t ch, uint32_t line_number, uint32_t index); //TODO: add string
         void delete_line(uint32_t line_number);

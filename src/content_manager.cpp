@@ -23,6 +23,17 @@ namespace vicpad {
     }
   }
   
+  void ContentManager::dump(std::string filename) const {
+    std::ofstream outfile(filename);
+    if (outfile.is_open()) {
+      for (auto& line : buf) {
+        outfile << std::string(line.begin(), line.end()) << "\n";
+      }
+    }
+    
+    outfile.close();
+  }
+  
   void ContentManager::add_line(std::string line, uint32_t line_number) {
     if (line_number >= buf.size()) line_number = buf.size() - 1;
     std::vector<char32_t> vline(line.begin(), line.end());
@@ -30,6 +41,7 @@ namespace vicpad {
   }
   
   void ContentManager::add_char(char32_t ch, uint32_t line_number, uint32_t index) {
+    if (!buf.size()) buf.push_back(std::vector<char32_t>());
     if (line_number >= buf.size()) line_number = buf.size() - 1;
     auto & line = buf[line_number];
     if (index > line.size()) index = line.size();
