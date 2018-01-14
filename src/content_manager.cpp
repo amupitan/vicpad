@@ -23,6 +23,10 @@ namespace vicpad {
     }
   }
   
+  const std::vector<std::vector<char32_t> >& ContentManager::data() const {
+    return buf;
+  }
+  
   void ContentManager::dump(std::string filename) const {
     std::ofstream outfile(filename);
     if (outfile.is_open()) {
@@ -73,4 +77,8 @@ namespace vicpad {
     if (line_number >= buf.size()) line_number = buf.size() - 1;
     return buf[line_number].size();
   }
+   
+   uint64_t ContentManager::length() const {
+     return buf.size();
+   }
 }

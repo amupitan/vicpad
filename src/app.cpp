@@ -17,28 +17,36 @@ namespace vicpad {
     interaction.line_length = 1;
     interaction.user_quit = false;
     interaction.handled = false;
-    interaction.is_enter = false;
     interaction.current_input = -1;
   }
   
   void App::start(config c) {
     message("hello world");
     filename = c.filename;
+    cm.populate(filename);
+    render_buffer();
     while (should_be_open()){
       update_state();
       update_line_number();
-      // set_cursor_position();
       interaction.handled = false;
       auto input = cli->get_input();
       process_input(input);
-      
-      
     }
     
   }
   
   void App::message(const char* msg) const {
     cli->message(msg);
+  }
+  
+  void App::render_buffer() const {
+    auto buffer = cm.data();
+    for (auto line : buffer) {
+      cli->write(std::string(line.begin(), line.end()).c_str());
+      cli->write("\n");
+    }
+    
+    
   }
   
   bool App::should_be_open() const {
@@ -73,7 +81,6 @@ namespace vicpad {
   void App::handle_enter() {
     //interaction.handled = true;
     interaction.line_length++;
-    // interaction.is_enter = true;
     cm.add_line("", cursor.y+1);
   }
   
@@ -137,8 +144,10 @@ namespace vicpad {
   void App::update_state()  {
     if (interaction.handled) return;
     if (interaction.current_input == -1) {
-      cursor.y = 0;
-      cursor.x = 0;
+      cursor.y = cm.length() ? cm.length() - 1 : 0;
+      cursor.x = cm.get_line_length(cursor.y);
+      
+      cli->set_cursor_position(cursor.x, cursor.y);
       // TODO: set to last position
       return;
     }

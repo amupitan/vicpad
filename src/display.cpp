@@ -121,6 +121,11 @@ namespace vicpad{
     refresh();
   }
   
+  void CLIDisplay::write(const char* line) const {
+    printw(line);
+    refresh();
+  }
+  
   CLIDisplay::~CLIDisplay(){
     // end curses mode
     endwin();
