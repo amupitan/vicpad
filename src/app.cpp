@@ -77,6 +77,10 @@ namespace vicpad {
     cm.add_line("", cursor.y+1);
   }
   
+  void App::save() const {
+    cm.dump(filename); //TODO move to on save;
+  }
+  
   void App::handle_char() {
     cm.add_char((char32_t)interaction.current_input, cursor.y, cursor.x);
   }
@@ -92,6 +96,7 @@ namespace vicpad {
         break;
       case key::ESC: // ESC
         interaction.user_quit = true;
+        save();
         break;
       case key::ENTER: // Enter
         handle_enter();
@@ -145,7 +150,7 @@ namespace vicpad {
   }
   
   App::~App() {
-    cm.dump("dump.txt");
+    save();
     delete cli;
   }
 
