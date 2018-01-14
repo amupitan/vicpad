@@ -18,6 +18,7 @@ namespace vicpad {
         void delete_line(uint32_t line_number);
         void remove_char(uint32_t line_number, uint32_t index); // TODO: remove string
         std::string get_line(uint32_t line_number) const;
+        uint64_t get_line_length(uint32_t line_number) const;
     };
 
 }

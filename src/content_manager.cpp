@@ -35,7 +35,7 @@ namespace vicpad {
   }
   
   void ContentManager::add_line(std::string line, uint32_t line_number) {
-    if (line_number >= buf.size()) line_number = buf.size() - 1;
+    if (line_number > buf.size()) line_number = buf.size();
     std::vector<char32_t> vline(line.begin(), line.end());
     buf.insert(buf.begin() + line_number, vline);
   }
@@ -43,6 +43,7 @@ namespace vicpad {
   void ContentManager::add_char(char32_t ch, uint32_t line_number, uint32_t index) {
     if (!buf.size()) buf.push_back(std::vector<char32_t>());
     if (line_number >= buf.size()) line_number = buf.size() - 1;
+    // if (line_number == buf.size()) buf.push_back(std::vector<char32_t>()); TODO: check
     auto & line = buf[line_number];
     if (index > line.size()) index = line.size();
     
@@ -65,5 +66,11 @@ namespace vicpad {
     if (line_number >= buf.size()) return "";
     auto & line = buf[line_number];
     return std::string(line.begin(), line.end());
+  }
+  
+  uint64_t ContentManager::get_line_length(uint32_t line_number) const {
+    if (buf.size() == 0) return 0;
+    if (line_number >= buf.size()) line_number = buf.size() - 1;
+    return buf[line_number].size();
   }
 }

@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 
 #include "../include/vicpad/app.h"
 #include "../include/vicpad/display.h"
@@ -54,11 +55,17 @@ namespace vicpad {
   void App::handle_backspace() {
     interaction.handled = true;
     if (cursor.x == 0) {
-      cursor.y--;
+      if (cursor.y) {
+        cm.delete_line(cursor.y);
+        cursor.y--;
+      }
+      // TODO set x based on contnet
+      cursor.x = cm.get_line_length(cursor.y);
       cli->set_cursor_position(cursor.x, cursor.y);
       return;
     }
     cli->backspace(cursor.x, cursor.y);
+    cm.remove_char(cursor.y, cursor.x-1);
     set_cursor_position();
   }
   
@@ -67,7 +74,7 @@ namespace vicpad {
     //interaction.handled = true;
     interaction.line_length++;
     // interaction.is_enter = true;
-    cm.add_line("", cursor.y);
+    cm.add_line("", cursor.y+1);
   }
   
   void App::handle_char() {
@@ -76,7 +83,7 @@ namespace vicpad {
   
   void App::process_input(key_code input) {
     auto code = input.code;
-    interaction.length = 1; //
+    interaction.length = 1; // TODO
     interaction.current_input = input.value;
     
     switch (code) {
