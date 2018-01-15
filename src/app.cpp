@@ -20,7 +20,6 @@ namespace vicpad {
   }
   
   void App::start(config c) {
-    message("vic pad");
     filename = c.filename;
     state.tab_length = c.tab_length;
     cm.populate(filename);
@@ -41,7 +40,7 @@ namespace vicpad {
   
   void App::render_buffer() const {
     auto buffer = cm.data();
-    for (auto line : buffer) {
+    for (auto& line : buffer) {
       cli->write(std::string(line.begin(), line.end()).c_str());
       cli->write("\n");
     }
@@ -56,7 +55,9 @@ namespace vicpad {
   
   void App::update_line_number() const{
     std::string msg = filename;
-    msg = msg + " L" + std::to_string(interaction.line_length) + ":" + std::to_string(cursor.x + 1) + "C"; 
+    cli->clear_bottom();
+    msg = msg + " L" + std::to_string(cursor.y + 1) + ":" + std::to_string(cursor.x + 1) + "C"; 
+    message("vic pad");
     cli->left_message(msg.c_str());
   }
 
@@ -140,29 +141,22 @@ namespace vicpad {
       case key::UP:
         cursor.y--;
         handle_arrow_key();
-        // cli->set_cursor_position(cursor.x, cursor.y);
         break;
       case key::DOWN:
         cursor.y++;
-        // cli->set_cursor_position(cursor.x, ++cursor.y); 
         handle_arrow_key();               
         break;
       case key::LEFT:
       cursor.x--;
-        // cli->set_cursor_position(--cursor.x, cursor.y);    
         handle_arrow_key();    
         break;
       case key::RIGHT:
         cursor.x++;
-        // cli->set_cursor_position(++cursor.x, cursor.y);
         handle_arrow_key();        
         break;
       case key::UNKNOWN:
         break;
     }
-    
-    // interaction.length = 1; //
-    // interaction.current_input = input.value;
   }
   
   void App::set_cursor_position() {

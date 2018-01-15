@@ -38,6 +38,7 @@ namespace vicpad{
       virtual void backspace(uint64_t x, uint64_t y) const = 0;
       virtual void write(const char* line) const = 0;
       virtual void write(uint64_t x, uint64_t y, const char* line) const = 0;
+      virtual void clear_bottom() const = 0;
       virtual ~Display(){}
     };
   } // display
@@ -101,6 +102,8 @@ namespace vicpad{
     
     void write(uint64_t x, uint64_t y, const char* line) const;
     
+    void clear_bottom() const;
+
     /**
      * Closes ncurses window
      */

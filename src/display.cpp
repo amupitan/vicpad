@@ -144,6 +144,16 @@ namespace vicpad{
     refresh();
   }
   
+  void CLIDisplay::clear_bottom() const {
+    int64_t curr_x, curr_y, max_x, max_y;
+    getyx(stdscr, curr_y, curr_x);
+    getmaxyx(stdscr, max_y, max_x);
+    
+    move(max_y - 1, 0);
+    clrtoeol();
+    move(curr_y, curr_x);
+  }
+  
   CLIDisplay::~CLIDisplay(){
     // end curses mode
     endwin();
