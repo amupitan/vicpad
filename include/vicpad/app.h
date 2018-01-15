@@ -1,6 +1,7 @@
 #ifndef APP_H_
 #define APP_H_
 
+#include "unint.h"
 #include "display.h"
 #include "config.h"
 #include "content_manager.h"
@@ -12,8 +13,8 @@ namespace vicpad{
     display::Display* cli;
     ContentManager cm;
     struct {
-      uint16_t x;
-      uint16_t y;
+      utils::unint x;
+      utils::unint y;
       bool normal;
     } cursor;
     
@@ -39,6 +40,7 @@ namespace vicpad{
     void handle_enter();
     void handle_char();
     void handle_tab();
+    void handle_arrow_key();
     void render_buffer() const;
     void save() const;
   public:

@@ -105,6 +105,16 @@ namespace vicpad {
     interaction.handled = true;
   }
   
+  void App::handle_arrow_key() {
+    auto line_length = cm.get_line_length(cursor.y);
+    if (cursor.x >= line_length) cursor.x = line_length;
+    
+    auto num_lines = cm.length();
+    if (cursor.y >= num_lines) cursor.y = num_lines - 1;
+    interaction.handled = true;
+    cli->set_cursor_position(cursor.x, cursor.y);
+  }
+  
   void App::process_input(key_code input) {
     auto code = input.code;
     interaction.length = 1; // TODO
@@ -128,20 +138,24 @@ namespace vicpad {
         handle_backspace();
         break;
       case key::UP:
-        cli->set_cursor_position(cursor.x, --cursor.y);
-        interaction.handled = true;        
+        cursor.y--;
+        handle_arrow_key();
+        // cli->set_cursor_position(cursor.x, cursor.y);
         break;
       case key::DOWN:
-        cli->set_cursor_position(cursor.x, ++cursor.y); 
-        interaction.handled = true;               
+        cursor.y++;
+        // cli->set_cursor_position(cursor.x, ++cursor.y); 
+        handle_arrow_key();               
         break;
       case key::LEFT:
-        cli->set_cursor_position(--cursor.x, cursor.y);    
-        interaction.handled = true;    
+      cursor.x--;
+        // cli->set_cursor_position(--cursor.x, cursor.y);    
+        handle_arrow_key();    
         break;
       case key::RIGHT:
-        cli->set_cursor_position(++cursor.x, cursor.y);
-        interaction.handled = true;        
+        cursor.x++;
+        // cli->set_cursor_position(++cursor.x, cursor.y);
+        handle_arrow_key();        
         break;
       case key::UNKNOWN:
         break;
