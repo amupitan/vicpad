@@ -79,7 +79,6 @@ namespace vicpad {
   
   
   void App::handle_enter() {
-    //interaction.handled = true;
     interaction.line_length++;
     cm.add_line("", cursor.y+1);
   }

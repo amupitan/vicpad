@@ -106,7 +106,14 @@ namespace vicpad{
   }
   
   pair CLIDisplay::render(int64_t x, int64_t y, int64_t c) const {
-    mvaddch(y, x, c);
+    // TODO: might not be the best approach
+    if (c == 10) {
+      mvaddch(y, x, c);
+    }else{
+      mvinsch(y, x, c);
+      move(y, x+1);
+    }
+    
     getyx(stdscr, y, x);
     return {x, y};
   }
