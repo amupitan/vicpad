@@ -139,7 +139,8 @@ namespace vicpad{
   }
   
   void CLIDisplay::write(uint64_t x, uint64_t y, const char* line) const {
-    mvprintw(y, x, line);
+    mvinsstr(y, x, line);
+    move(y, x + strlen(line));
     refresh();
   }
   

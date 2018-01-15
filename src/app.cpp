@@ -94,7 +94,7 @@ namespace vicpad {
   void App::handle_tab() {
     std::string tab = "\t";
     if (state.tab_length) {
-      tab = std::string(state.tab_length, 't'); 
+      tab = std::string(state.tab_length, ' '); 
     }
     
     cm.add_string(tab, cursor.y, cursor.x);
