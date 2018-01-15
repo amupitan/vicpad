@@ -25,6 +25,10 @@ namespace vicpad{
       uint16_t line_length;
     } interaction;
     
+    struct {
+      uint8_t tab_length;
+    } state;
+    
     void message(const char* msg) const;
     void update_line_number() const;
     bool should_be_open() const;
@@ -34,6 +38,7 @@ namespace vicpad{
     void handle_backspace();
     void handle_enter();
     void handle_char();
+    void handle_tab();
     void render_buffer() const;
     void save() const;
   public:

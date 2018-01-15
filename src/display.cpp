@@ -19,6 +19,11 @@ namespace vicpad{
     {KEY_DOWN, key::DOWN},
     {KEY_LEFT, key::LEFT},
     {KEY_RIGHT, key::RIGHT},
+    {KEY_STAB, key::TAB},
+    {KEY_BTAB, key::TAB},
+    {KEY_CTAB, key::TAB},
+    {KEY_CATAB, key::TAB},
+    {'\t', key::TAB},
     {10, key::ENTER}, //KEY_ENTER
     {27, key::ESC},
 
@@ -105,7 +110,7 @@ namespace vicpad{
     return {x, y};
   }
   
-  pair CLIDisplay::render(int64_t x, int64_t y, int64_t c) const {
+  pair CLIDisplay::render(uint64_t x, uint64_t y, int64_t c) const {
     // TODO: might not be the best approach
     if (c == 10) {
       mvaddch(y, x, c);
@@ -115,7 +120,7 @@ namespace vicpad{
     }
     
     getyx(stdscr, y, x);
-    return {x, y};
+    return { (uint32_t)x, (uint32_t)y}; //TODO: narrowing
   }
 
   int16_t CLIDisplay::process_input(int16_t input) const {
@@ -130,6 +135,11 @@ namespace vicpad{
   
   void CLIDisplay::write(const char* line) const {
     printw(line);
+    refresh();
+  }
+  
+  void CLIDisplay::write(uint64_t x, uint64_t y, const char* line) const {
+    mvprintw(y, x, line);
     refresh();
   }
   

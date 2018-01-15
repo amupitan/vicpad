@@ -8,7 +8,7 @@ namespace vicpad {
   
   void ContentManager::do_something() const {}
   
-  void ContentManager::populate(std::string filename) {
+  void ContentManager::populate(const std::string& filename) {
    
     std::ifstream infile(filename);
     if (!infile.good()) {
@@ -27,7 +27,7 @@ namespace vicpad {
     return buf;
   }
   
-  void ContentManager::dump(std::string filename) const {
+  void ContentManager::dump(const std::string& filename) const {
     std::ofstream outfile(filename);
     if (outfile.is_open()) {
       for (auto& line : buf) {
@@ -38,7 +38,7 @@ namespace vicpad {
     outfile.close();
   }
   
-  void ContentManager::add_line(std::string line, uint32_t line_number) {
+  void ContentManager::add_line(const std::string& line, uint32_t line_number) {
     if (line_number > buf.size()) line_number = buf.size();
     std::vector<char32_t> vline(line.begin(), line.end());
     buf.insert(buf.begin() + line_number, vline);
@@ -52,6 +52,17 @@ namespace vicpad {
     if (index > line.size()) index = line.size();
     
     line.insert(line.begin() + index, ch);
+  }
+  
+  void ContentManager::add_string(const std::string& str, uint32_t line_number, uint32_t index) {
+    if (!buf.size()) buf.push_back(std::vector<char32_t>());
+    if (line_number >= buf.size()) line_number = buf.size() - 1;
+    // if (line_number == buf.size()) buf.push_back(std::vector<char32_t>()); TODO: check
+    auto & line = buf[line_number];
+    if (index > line.size()) index = line.size();
+    
+    std::string new_line = std::string(line.begin(), line.begin() + index) + str + std::string(line.begin() + index, line.end());
+    buf[line_number] = std::vector<char32_t>(new_line.begin(), new_line.end());
   }
 
   void ContentManager::delete_line(uint32_t line_number) {

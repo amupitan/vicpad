@@ -1,5 +1,4 @@
 #include <string>
-#include <iostream>
 
 #include "../include/vicpad/app.h"
 #include "../include/vicpad/display.h"
@@ -21,8 +20,9 @@ namespace vicpad {
   }
   
   void App::start(config c) {
-    message("hello world");
+    message("vic pad");
     filename = c.filename;
+    state.tab_length = c.tab_length;
     cm.populate(filename);
     render_buffer();
     while (should_be_open()){
@@ -91,6 +91,20 @@ namespace vicpad {
     cm.add_char((char32_t)interaction.current_input, cursor.y, cursor.x);
   }
   
+  void App::handle_tab() {
+    std::string tab = "\t";
+    if (state.tab_length) {
+      tab = std::string(state.tab_length, 't'); 
+    }
+    
+    cm.add_string(tab, cursor.y, cursor.x);
+    cli->write(cursor.x, cursor.y, tab.c_str());
+    auto new_position = cli->get_cursor_position();
+    cursor.x = new_position.x;
+    cursor.y = new_position.y;
+    interaction.handled = true;
+  }
+  
   void App::process_input(key_code input) {
     auto code = input.code;
     interaction.length = 1; // TODO
@@ -106,6 +120,9 @@ namespace vicpad {
         break;
       case key::ENTER: // Enter
         handle_enter();
+        break;
+      case key::TAB:
+        handle_tab();
         break;
       case key::BACKSPACE:
         handle_backspace();
