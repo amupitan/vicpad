@@ -64,6 +64,12 @@ namespace vicpad {
     std::string new_line = std::string(line.begin(), line.begin() + index) + str + std::string(line.begin() + index, line.end());
     buf[line_number] = std::vector<char32_t>(new_line.begin(), new_line.end());
   }
+  
+  void ContentManager::repeat(uint64_t line_number, uint64_t index, char32_t ch, uint64_t n) {
+    if (line_number >= buf.size()) return;
+    auto & line =  buf[line_number];
+    line.insert(line.begin() + index, n, ch);
+  }
 
   void ContentManager::delete_line(uint32_t line_number) {
     if (line_number >= buf.size()) return;

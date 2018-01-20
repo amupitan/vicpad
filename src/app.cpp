@@ -98,7 +98,8 @@ namespace vicpad {
       tab = std::string(state.tab_length, ' '); 
     }
     
-    cm.add_string(tab, cursor.y, cursor.x);
+    // cm.repeat(cursor.y, cursor.x, ' ', state.tab_length);
+    cm.add_string(tab, cursor.y, cursor.x); // TODO: use the commented version
     cli->write(cursor.x, cursor.y, tab.c_str());
     auto new_position = cli->get_cursor_position();
     cursor.x = new_position.x;
