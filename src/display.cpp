@@ -160,8 +160,6 @@ void CLIDisplay::open_command_palette() {
   getyx(stdscr, cache_cursor.y, cache_cursor.x);
   clear_bottom();
 
-  // auto max_y = getcury(stdscr);
-  // max_y = 30;
   mvprintw(height - 1, 0, "> ");
 }
 
@@ -172,7 +170,7 @@ const char* CLIDisplay::get_command() const {
 
   while (((ch = getch()) != '\n')) {
     if (cmd.length() < max_x) {
-      // TODO: only print out scii
+      // TODO: only print out ascii
       addch(ch);
     } else {
       beep();
