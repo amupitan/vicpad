@@ -43,6 +43,7 @@ namespace vicpad{
     void handle_arrow_key();
     void render_buffer() const;
     void save() const;
+    void start_command_executer();
   public:
     App();
     void start(config c);
