@@ -41,7 +41,6 @@ class Display {
   virtual pair get_cursor_position() const = 0;
   virtual void set_cursor_position(uint16_t x, uint16_t y) const = 0;
   virtual pair render(uint64_t x, uint64_t y, int64_t c) const = 0;
-  virtual int16_t process_input(int16_t input) const = 0;
   virtual void backspace(uint64_t x, uint64_t y) const = 0;
   virtual void write(const char* line) const = 0;
   virtual void write(uint64_t x, uint64_t y, const char* line) const = 0;
@@ -105,8 +104,6 @@ class CLIDisplay : public display::Display {
    * \return the position of the rendered character
    */
   display::pair render(uint64_t x, uint64_t y, int64_t c) const;
-
-  int16_t process_input(int16_t input) const;
 
   void backspace(uint64_t x, uint64_t y) const;
 

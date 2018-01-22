@@ -31,6 +31,8 @@ const std::unordered_map<int16_t, key> keycodes = {
 
 };
 
+bool is_ascii(int64_t c) { return c >= 32 && c <= 126; }
+
 CLIDisplay::CLIDisplay(uint16_t width, uint16_t height)
     : width(width), height(height) {
   // start curses mode
@@ -96,7 +98,7 @@ void CLIDisplay::print(position screen_position, position align,
 
 key_code CLIDisplay::get_input() const {
   auto input = getch();
-  if (input >= 32 && input <= 126) {  // is readbale char
+  if (is_ascii(input)) {  // is readbale char
     return {key::ALPHANUM, input};
   }
 
@@ -126,8 +128,6 @@ pair CLIDisplay::render(uint64_t x, uint64_t y, int64_t c) const {
   getyx(stdscr, y, x);
   return {(uint32_t)x, (uint32_t)y};  // TODO: narrowing
 }
-
-int16_t CLIDisplay::process_input(int16_t input) const { return 0; }
 
 void CLIDisplay::backspace(uint64_t x, uint64_t y) const {
   mvaddch(y, x, '\b');
@@ -168,24 +168,27 @@ const char* CLIDisplay::get_command() const {
   std::string cmd;
   int max_x = getmaxx(stdscr);
 
-  while (((ch = getch()) != '\n')) {
-    if (cmd.length() < max_x) {
-      // TODO: only print out ascii
-      addch(ch);
-    } else {
-      beep();
-      continue;
-    }
-
+  while ((ch = getch()) != '\n') {
     switch (ch) {
-      case '\b':  // TODO: backspace does not work
-        if (cmd.length() > 0) cmd = cmd.substr(0, cmd.length() - 1);
+      case 127:
+        if (cmd.length() == 0) {
+          beep();
+          continue;
+        }
+        cmd = cmd.substr(0, cmd.length() - 1);
+        addch('\b');
         delch();
         break;
       case 27:  // quit on ESC
         return "quit";
       default:
-        cmd += keyname(ch);
+        if (cmd.length() < max_x && is_ascii(ch)) {
+          cmd += keyname(ch);
+          addch(ch);
+        } else {
+          beep();
+          continue;
+        }
     }
   }
 
