@@ -2,13 +2,13 @@
 #define CONFIG_H_
 
 namespace vicpad {
-  struct config {
-    const char* filename;
-    int code;
-    int tab_length;
-  };
-  
-  const config parse_args(int argc, char** args);
-}
+struct config {
+  const char* filename;
+  int code;
+  int tab_length;
+};
+
+const config parse_args(int argc, char** args);
+}  // namespace vicpad
 
 #endif

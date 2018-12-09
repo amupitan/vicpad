@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include <ncurses.h>
 
@@ -31,7 +32,9 @@ const std::unordered_map<int16_t, key> keycodes = {
 
 };
 
-bool is_ascii(int64_t c) { return c >= 32 && c <= 126; }
+bool is_ascii(int64_t c) {
+  return c >= 32 && c <= 126;
+}
 
 CLIDisplay::CLIDisplay(uint16_t width, uint16_t height)
     : width(width), height(height) {
@@ -55,6 +58,14 @@ void CLIDisplay::resize(uint16_t width, uint16_t height) {
   this->height = height;
 }
 
+void CLIDisplay::populate(
+    const std::vector<std::vector<char32_t> >& data) const {
+  for (auto& line : data) {
+    write(std::string(line.begin(), line.end()).c_str());
+    write("\n");
+  }
+}
+
 void CLIDisplay::message(const char* msg) const {
   int prev_x, prev_y;
   getyx(stdscr, prev_y, prev_x);
@@ -75,7 +86,8 @@ void CLIDisplay::set_cursor_position(uint16_t x, uint16_t y) const {
   move(y, x);
 }
 
-void CLIDisplay::print(position screen_position, position align,
+void CLIDisplay::print(position screen_position,
+                       position align,
                        const char* msg) const {
   int y = screen_position == position::TOP ? 0 : height - 1;
   int x;

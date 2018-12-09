@@ -34,9 +34,13 @@ class Display {
   Display() {}
 
  public:
+  // TODO(DEV): remove/rename these because they're specific to the CLI
   virtual void resize(uint16_t width, uint16_t height) = 0;
-  virtual void message(const char* msg) const = 0;
   virtual void left_message(const char* msg) const = 0;
+
+  virtual void populate(
+      const std::vector<std::vector<char32_t> >& data) const = 0;
+  virtual void message(const char* msg) const = 0;
   virtual key_code get_input() const = 0;
   virtual pair get_cursor_position() const = 0;
   virtual void set_cursor_position(uint16_t x, uint16_t y) const = 0;
@@ -89,6 +93,12 @@ class CLIDisplay : public display::Display {
    * \param msg message to be displayed
    */
   void left_message(const char* msg) const;
+
+  /**
+   * Renders the initial data
+   * \param data the data rendered
+   */
+  void populate(const std::vector<std::vector<char32_t> >& data) const;
 
   /**
    * Handles the input from the user

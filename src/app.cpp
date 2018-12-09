@@ -38,7 +38,7 @@ void App::start(config c) {
   filename = c.filename;
   state.tab_length = c.tab_length;
   cm.populate(filename);
-  render_buffer();
+  cli->populate(cm.data());
   while (should_be_open()) {
     update_state();
     update_line_number();
@@ -48,18 +48,13 @@ void App::start(config c) {
   }
 }
 
-void App::message(const char* msg) const { cli->message(msg); }
-
-void App::render_buffer() const {
-  auto buffer = cm.data();
-  for (auto& line : buffer) {
-    cli->write(std::string(line.begin(), line.end()).c_str());
-    cli->write("\n");
-  }
+void App::message(const char* msg) const {
+  cli->message(msg);
 }
 
 bool App::should_be_open() const {
-  if (interaction.user_quit) return false;
+  if (interaction.user_quit)
+    return false;
   return true;
 }
 
@@ -119,10 +114,12 @@ void App::handle_tab() {
 
 void App::handle_arrow_key() {
   auto line_length = cm.get_line_length(cursor.y);
-  if (cursor.x >= line_length) cursor.x = line_length;
+  if (cursor.x >= line_length)
+    cursor.x = line_length;
 
   auto num_lines = cm.length();
-  if (cursor.y >= num_lines) cursor.y = num_lines - 1;
+  if (cursor.y >= num_lines)
+    cursor.y = num_lines - 1;
   interaction.handled = true;
   cli->set_cursor_position(cursor.x, cursor.y);
 }
@@ -207,7 +204,8 @@ void App::set_cursor_position() {
 }
 
 void App::update_state() {
-  if (interaction.handled) return;
+  if (interaction.handled)
+    return;
   if (interaction.current_input == -1) {
     cursor.y = cm.length() ? cm.length() - 1 : 0;
     cursor.x = cm.get_line_length(cursor.y);
@@ -222,6 +220,8 @@ void App::update_state() {
   cursor.y = coords.y;
 }
 
-App::~App() { delete cli; }
+App::~App() {
+  delete cli;
+}
 
 }  // namespace vicpad
