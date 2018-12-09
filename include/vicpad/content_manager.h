@@ -4,10 +4,12 @@
 #include <string>
 #include <vector>
 
+#include "./types.h"
+
 namespace vicpad {
 
 class ContentManager {
-  std::vector<std::vector<char32_t> > buf;
+  Content buf;
 
  public:
   ContentManager();
@@ -30,7 +32,8 @@ class ContentManager {
   void remove_char(uint32_t line_number, uint32_t index);
   std::string get_line(uint32_t line_number) const;
   uint64_t get_line_length(uint32_t line_number) const;
-  const std::vector<std::vector<char32_t> >& data() const;
+  const Content& data() const;
+  const Content data(int start, int end) const;
   uint64_t length() const;
 };
 

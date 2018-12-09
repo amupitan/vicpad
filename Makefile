@@ -11,7 +11,7 @@ SRCDIR = src
 BINDIR = bin
 BDIR = build
 
-_DEPS = app.h display.h config.h content_manager.h unint.h 
+_DEPS = app.h display.h config.h content_manager.h unint.h types.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 _OBJ = main.o app.o display.o config.o content_manager.o unint.o
