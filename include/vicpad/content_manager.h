@@ -33,7 +33,7 @@ class ContentManager {
   std::string get_line(uint32_t line_number) const;
   uint64_t get_line_length(uint32_t line_number) const;
   const Content& data() const;
-  const Content data(int start, int end) const;
+  const Content data(int start, int end = -1) const;
   uint64_t length() const;
 };
 

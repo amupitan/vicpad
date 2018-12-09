@@ -26,7 +26,8 @@ const Content& ContentManager::data() const {
   return buf;
 }
 
-const Content ContentManager::data(int start, int end) const {
+const Content ContentManager::data(int start, int end = -1) const {
+  end = end == -1 ? buf.size() : end;
   return Content(buf.begin() + start, buf.begin() + end);
 }
 
