@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+#include "./types.h"
+
 namespace vicpad {
 namespace display {
 
@@ -38,13 +40,13 @@ class Display {
   virtual void resize(uint16_t width, uint16_t height) = 0;
   virtual void left_message(const char* msg) const = 0;
 
-  virtual void populate(
-      const std::vector<std::vector<char32_t> >& data) const = 0;
+  virtual void populate(const Content& data) const = 0;
   virtual void message(const char* msg) const = 0;
   virtual key_code get_input() const = 0;
   virtual pair get_cursor_position() const = 0;
   virtual void set_cursor_position(uint16_t x, uint16_t y) const = 0;
   virtual pair render(uint64_t x, uint64_t y, int64_t c) const = 0;
+  virtual pair render(const Content&, uint64_t y) const = 0;
   virtual void backspace(uint64_t x, uint64_t y) const = 0;
   virtual void write(const char* line) const = 0;
   virtual void write(uint64_t x, uint64_t y, const char* line) const = 0;
@@ -98,7 +100,7 @@ class CLIDisplay : public display::Display {
    * Renders the initial data
    * \param data the data rendered
    */
-  void populate(const std::vector<std::vector<char32_t> >& data) const;
+  void populate(const Content& data) const;
 
   /**
    * Handles the input from the user
@@ -115,6 +117,18 @@ class CLIDisplay : public display::Display {
    */
   display::pair render(uint64_t x, uint64_t y, int64_t c) const;
 
+  /**
+   * Writes the content starting from the (0,y)
+   * \param y the y position to start writing
+   * \return the current position of cursor
+   */
+  display::pair render(const Content& content, uint64_t y) const;
+
+  /**
+   * Handles the backspace key by removing the last displayed character
+   * \param x the x co-ordinate of the charcter to be removed
+   * \param y the y co-ordinate of the charcter to be removed
+   */
   void backspace(uint64_t x, uint64_t y) const;
 
   /**
