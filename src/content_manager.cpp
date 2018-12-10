@@ -26,7 +26,7 @@ const Content& ContentManager::data() const {
   return buf;
 }
 
-const Content ContentManager::data(int start, int end = -1) const {
+const Content ContentManager::data(int start, int end) const {
   end = end == -1 ? buf.size() : end;
   return Content(buf.begin() + start, buf.begin() + end);
 }
@@ -97,6 +97,33 @@ void ContentManager::delete_line(uint32_t line_number) {
   if (line_number >= buf.size())
     return;
   buf.erase(buf.begin() + line_number);
+}
+
+/**
+ * TODO(COMMENT)
+ * TODO(TEST): this function is supposed to handle an enter key being pressed
+ * and adjust the content as necessary. It has not been tested in any way
+ */
+void ContentManager::line_break(uint32_t line_number, uint32_t index) {
+  if (line_number >= buf.size()) {
+    line_number = buf.size() - 1;
+  }
+
+  // insert empty line after line_number
+  auto& line = buf[line_number];
+  if (index >= line.size()) {
+    buf.insert(buf.begin() + line_number, Line());
+    return;
+  }
+
+  // get content after enter key
+  auto extra = Line(line.begin() + index, line.end());
+
+  // remove content after enter key from the current line
+  line.resize(index);
+
+  // add the new line
+  buf.insert(buf.begin() + line_number, extra);
 }
 
 void ContentManager::remove_char(uint32_t line_number, uint32_t index) {

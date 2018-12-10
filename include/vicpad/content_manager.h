@@ -28,6 +28,7 @@ class ContentManager {
   void add_string(const std::string& str, uint32_t line_number, uint32_t index);
   void repeat(uint64_t line_number, uint64_t index, char32_t ch, uint64_t n);
   void delete_line(uint32_t line_number);
+  void line_break(uint32_t line_number, uint32_t index);
   // TODO: remove string
   void remove_char(uint32_t line_number, uint32_t index);
   std::string get_line(uint32_t line_number) const;

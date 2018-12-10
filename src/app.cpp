@@ -86,7 +86,8 @@ void App::handle_backspace() {
 
 void App::handle_enter() {
   interaction.line_length++;
-  cm.add_line("", cursor.y + 1);
+  // cm.add_line("", cursor.y + 1);
+  cm.line_break(cursor.y, cursor.x);
 }
 
 void App::save() const {
