@@ -85,9 +85,15 @@ void App::handle_backspace() {
 }
 
 void App::handle_enter() {
-  interaction.line_length++;
-  // cm.add_line("", cursor.y + 1);
   cm.line_break(cursor.y, cursor.x);
+  cli->render(cm.data(cursor.y), cursor.y);
+
+  cursor.x = 0;
+  cursor.y++;
+  cli->set_cursor_position(cursor.x, cursor.y);
+
+  interaction.handled = true;
+  interaction.line_length++;
 }
 
 void App::save() const {
