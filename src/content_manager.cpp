@@ -119,10 +119,11 @@ void ContentManager::line_break(uint32_t line_number, uint32_t index) {
     line_number = buf.size() - 1;
   }
 
-  // insert empty line after line_number
   auto& line = buf[line_number];
+
+  // insert empty line after line_number
   if (index >= line.size()) {
-    buf.insert(buf.begin() + line_number, Line());
+    buf.insert(buf.begin() + line_number + 1, Line());
     return;
   }
 
@@ -133,7 +134,7 @@ void ContentManager::line_break(uint32_t line_number, uint32_t index) {
   line.resize(index);
 
   // add the new line
-  buf.insert(buf.begin() + line_number, extra);
+  buf.insert(buf.begin() + line_number + 1, extra);
 }
 
 void ContentManager::remove_char(uint32_t line_number, uint32_t index) {
