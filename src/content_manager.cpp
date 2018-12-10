@@ -34,8 +34,18 @@ const Content ContentManager::data(int start, int end) const {
 void ContentManager::dump(const std::string& filename) const {
   std::ofstream outfile(filename);
   if (outfile.is_open()) {
-    for (auto& line : buf) {
-      outfile << std::string(line.begin(), line.end()) << "\n";
+    auto line_iter = buf.begin();
+
+    // write first line
+    if (line_iter != buf.end()) {
+      auto& line = *line_iter;
+      outfile << std::string(line.begin(), line.end());
+    }
+
+    // write rest of lines
+    while (++line_iter != buf.end()) {
+      auto& line = *line_iter;
+      outfile << "\n" << std::string(line.begin(), line.end());
     }
   }
 
