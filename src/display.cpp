@@ -142,7 +142,11 @@ pair CLIDisplay::render(uint64_t x, uint64_t y, int64_t c) const {
 }
 
 pair CLIDisplay::render(const Content& content, uint64_t y) const {
+  // clear current section of screen before starting to render
   move(y, 0);
+  clrtobot();
+  move(y, 0);
+
   for (auto& line : content) {
     write(std::string(line.begin(), line.end()).c_str());
     write("\n");

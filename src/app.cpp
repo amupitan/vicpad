@@ -71,14 +71,18 @@ void App::handle_backspace() {
   interaction.handled = true;
   if (cursor.x == 0) {
     if (cursor.y) {
-      cm.delete_line(cursor.y);
-      cursor.y--;
+      // merge prev line with current line
+      cm.merge_lines(--cursor.y);
+
+      cursor.x = cm.get_line_length(cursor.y);
+
+      cli->render(cm.data(cursor.y), cursor.y);
+      cli->set_cursor_position(cursor.x, cursor.y);
     }
-    // TODO set x based on contnet
-    cursor.x = cm.get_line_length(cursor.y);
-    cli->set_cursor_position(cursor.x, cursor.y);
+
     return;
   }
+
   cli->backspace(cursor.x, cursor.y);
   cm.remove_char(cursor.y, cursor.x - 1);
   set_cursor_position();
