@@ -103,10 +103,20 @@ void ContentManager::repeat(uint64_t line_number,
   line.insert(line.begin() + index, n, ch);
 }
 
-void ContentManager::delete_line(uint32_t line_number) {
-  if (line_number >= buf.size())
+void ContentManager::merge_lines(uint32_t line_number) {
+  // cannot merge if this line is invalid or is
+  // the last valid line
+  if (line_number >= buf.size() - 1)
     return;
-  buf.erase(buf.begin() + line_number);
+
+  // append bottom line to top line
+  auto& top_line = buf[line_number];
+  auto& bottom_line = buf[line_number + 1];
+  top_line.reserve(top_line.size() + bottom_line.size());
+  top_line.insert(top_line.end(), bottom_line.begin(), bottom_line.end());
+
+  // remove bottom line
+  buf.erase(buf.begin() + line_number + 1);
 }
 
 /**
