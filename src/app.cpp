@@ -37,6 +37,7 @@ App::App() {
 void App::start(config c) {
   filename = c.filename;
   state.tab_length = c.tab_length;
+  state.use_spaces = c.use_spaces;
   cm.populate(filename);
   cli->populate(cm.data());
   while (should_be_open()) {
@@ -83,9 +84,19 @@ void App::handle_backspace() {
     return;
   }
 
-  cli->backspace(cursor.x, cursor.y);
   cm.remove_char(cursor.y, cursor.x - 1);
-  set_cursor_position();
+
+  // get updated line
+  auto curr_line = cm.data(cursor.y, cursor.y + 1);
+  if (curr_line.size() == 0)
+    return;
+
+  // render updated line
+  cli->render(curr_line[0], cursor.y);
+
+  // adjust cursor for backspace and update display
+  cursor.x--;
+  cli->set_cursor_position(cursor.x, cursor.y);
 }
 
 void App::handle_enter() {
@@ -109,14 +120,14 @@ void App::handle_char() {
 }
 
 void App::handle_tab() {
-  std::string tab = "\t";
-  if (state.tab_length) {
-    tab = std::string(state.tab_length, ' ');
-  }
+  std::string spaces(state.tab_length, ' ');
+  // TODO(DEV) tab is not yet supported because
+  // backspace isn't handled correctly with cm & cli
+  std::string tab = state.use_spaces ? spaces : "\t";
 
   // cm.repeat(cursor.y, cursor.x, ' ', state.tab_length);
   cm.add_string(tab, cursor.y, cursor.x);  // TODO: use the commented version
-  cli->write(cursor.x, cursor.y, tab.c_str());
+  cli->write(cursor.x, cursor.y, spaces.c_str());
   auto new_position = cli->get_cursor_position();
   cursor.x = new_position.x;
   cursor.y = new_position.y;
