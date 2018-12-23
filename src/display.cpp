@@ -141,11 +141,14 @@ pair CLIDisplay::render(uint64_t x, uint64_t y, int64_t c) const {
   return {(uint32_t)x, (uint32_t)y};  // TODO: narrowing
 }
 
-pair CLIDisplay::render(const Content& content, uint64_t y) const {
+pair CLIDisplay::render(const Content& content, uint64_t y, bool clear) const {
+  move(y, 0);
+
   // clear current section of screen before starting to render
-  move(y, 0);
-  clrtobot();
-  move(y, 0);
+  if (clear) {
+    clrtobot();
+    move(y, 0);
+  }
 
   for (auto& line : content) {
     write(std::string(line.begin(), line.end()).c_str());
@@ -156,6 +159,14 @@ pair CLIDisplay::render(const Content& content, uint64_t y) const {
   int x = 0;
   getyx(stdscr, y, x);
   return {(uint32_t)x, (uint32_t)y};
+}
+
+pair CLIDisplay::render(const Content& content, uint64_t y) const {
+  return render(content, y, true);
+}
+
+pair CLIDisplay::render(const Line& line, uint64_t line_number) const {
+  return render(Content{line}, line_number, false);
 }
 
 void CLIDisplay::backspace(uint64_t x, uint64_t y) const {

@@ -47,6 +47,7 @@ class Display {
   virtual void set_cursor_position(uint16_t x, uint16_t y) const = 0;
   virtual pair render(uint64_t x, uint64_t y, int64_t c) const = 0;
   virtual pair render(const Content&, uint64_t y) const = 0;
+  virtual pair render(const Line&, uint64_t) const = 0;
   virtual void backspace(uint64_t x, uint64_t y) const = 0;
   virtual void write(const char* line) const = 0;
   virtual void write(uint64_t x, uint64_t y, const char* line) const = 0;
@@ -74,6 +75,11 @@ class CLIDisplay : public display::Display {
   enum position { TOP, BOTTOM, LEFT, CENTER, RIGHT };
 
   void print(position screen_position, position align, const char* msg) const;
+
+  /**
+   * Renders the content at (0,y)
+   */
+  display::pair render(const Content&, uint64_t y, bool clear) const;
 
  public:
   /**
@@ -118,7 +124,16 @@ class CLIDisplay : public display::Display {
   display::pair render(uint64_t x, uint64_t y, int64_t c) const;
 
   /**
+   * Writes the line`
+   * \param line the line to be rendered
+   * \param line_number the y position to write the line
+   * \return the current position of cursor
+   */
+  display::pair render(const Line& line, uint64_t line_number) const;
+
+  /**
    * Writes the content starting from the (0,y)
+   * \param content the content to be rendered
    * \param y the y position to start writing
    * \return the current position of cursor
    */
