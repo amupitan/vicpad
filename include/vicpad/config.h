@@ -6,6 +6,7 @@ struct config {
   const char* filename;
   int code;
   int tab_length;
+  bool use_spaces;
 };
 
 const config parse_args(int argc, char** args);

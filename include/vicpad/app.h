@@ -28,6 +28,7 @@ class App {
 
   struct {
     uint8_t tab_length;
+    bool use_spaces;
   } state;
 
   void message(const char* msg) const;
