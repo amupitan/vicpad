@@ -51,6 +51,7 @@ class Display {
   virtual void backspace(uint64_t x, uint64_t y) const = 0;
   virtual void write(const char* line) const = 0;
   virtual void write(uint64_t x, uint64_t y, const char* line) const = 0;
+  virtual void tab(uint64_t x, uint64_t y) const = 0;
   virtual void clear_bottom() const = 0;
   virtual void open_command_palette() = 0;
   virtual void close_command_palette() const = 0;
@@ -161,12 +162,19 @@ class CLIDisplay : public display::Display {
   void write(const char* line) const;
 
   /**
-   * Inserts the string starting at the giving position
+   * Inserts the string starting at the given position
    * \param x x-coordinate of the insertion position
    * \param y y-coordinate of the insertion position
    * \param line string to be written
    */
   void write(uint64_t x, uint64_t y, const char* line) const;
+
+  /**
+   * Writes a tab at the given position
+   * \param x x-coordinate of the insertion position
+   * \param y y-coordinate of the insertion position
+   */
+  void tab(uint64_t x, uint64_t y) const;
 
   /**
    * Clears the bottom line of the screen

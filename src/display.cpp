@@ -186,6 +186,11 @@ void CLIDisplay::write(uint64_t x, uint64_t y, const char* line) const {
   refresh();
 }
 
+void CLIDisplay::tab(uint64_t x, uint64_t y) const {
+  mvaddch(y, x, '\t');
+  refresh();
+}
+
 void CLIDisplay::clear_bottom() const {
   int64_t curr_x, curr_y, max_x, max_y;
   getyx(stdscr, curr_y, curr_x);
