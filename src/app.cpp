@@ -72,10 +72,11 @@ void App::handle_backspace() {
   interaction.handled = true;
   if (cursor.x == 0) {
     if (cursor.y) {
-      // merge prev line with current line
-      cm.merge_lines(--cursor.y);
+      // get last x position of the line above
+      cursor.x = cm.get_line_length(--cursor.y);
 
-      cursor.x = cm.get_line_length(cursor.y);
+      // merge line above with current line
+      cm.merge_lines(cursor.y);
 
       cli->render(cm.data(cursor.y), cursor.y);
       cli->set_cursor_position(cursor.x, cursor.y);
