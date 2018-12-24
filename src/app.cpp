@@ -120,14 +120,17 @@ void App::handle_char() {
 }
 
 void App::handle_tab() {
-  std::string spaces(state.tab_length, ' ');
   // TODO(DEV) tab is not yet supported because
-  // backspace isn't handled correctly with cm & cli
-  std::string tab = state.use_spaces ? spaces : "\t";
+  // backspace isn't handled correctly with cli
+  std::string tab = "\t";
 
-  // cm.repeat(cursor.y, cursor.x, ' ', state.tab_length);
-  cm.add_string(tab, cursor.y, cursor.x);  // TODO: use the commented version
-  cli->write(cursor.x, cursor.y, spaces.c_str());
+  if (state.use_spaces) {
+    tab = std::string(state.tab_length, ' ');
+    cli->write(cursor.x, cursor.y, tab.c_str());
+  } else {
+    cli->tab(cursor.x, cursor.y);
+  }
+  cm.add_string(tab, cursor.y, cursor.x);
   auto new_position = cli->get_cursor_position();
   cursor.x = new_position.x;
   cursor.y = new_position.y;
