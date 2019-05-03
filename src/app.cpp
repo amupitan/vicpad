@@ -201,6 +201,7 @@ void App::start_command_executer() {
   std::string cmd_str = cli->get_command();
   auto cmd = commands.find(cmd_str);
   if (cmd == commands.end()) {
+    cli->left_message("invalid command. Press ESC to try again");
     // TODO handle error
     return;
   }
